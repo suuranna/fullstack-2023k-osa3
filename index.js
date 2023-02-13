@@ -60,9 +60,17 @@ app.delete('/api/persons/:id', (req, res) => {
 
 app.post('/api/persons', (req, res) => {
   const person = req.body
-  person.id = Math.floor(Math.random() * 10000)
-  persons = persons.concat(person)
-  res.json(person)
+
+  if (!person.name || !person.number) {
+    res.status(422).end('must have number and name')
+  } else if (persons.find(p => p.name === person.name)) {
+    res.status(422).end('name must be unique')
+  } else {
+    person.id = Math.floor(Math.random() * 10000)
+    persons = persons.concat(person)
+    res.json(person)
+  }
+
 })
 
 const PORT = 3001
