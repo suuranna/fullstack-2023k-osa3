@@ -1,6 +1,9 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
 var morgan = require('morgan')
+
+const NumberInfo = require('./modules/numberInfo')
 
 app.use(express.json())
 
@@ -18,7 +21,6 @@ app.use(morgan(function (tokens, req, res) {
 }))
 
 app.use(express.static('build'))
-
 
 let persons = [
   { 
@@ -42,13 +44,14 @@ let persons = [
   }
 ]
 
-
 app.get('/', (req, res) => {
   res.send('<h1>Hello World!</h1>')
 })
 
 app.get('/api/persons', (req, res) => {
-  res.json(persons)
+  NumberInfo.find({}).then(infos => {
+    res.json(infos)
+  })
 })
 
 app.get('/info', (req, res) => {
