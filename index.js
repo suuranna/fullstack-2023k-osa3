@@ -55,21 +55,18 @@ app.get('/api/persons', (req, res) => {
 })
 
 app.get('/info', (req, res) => {
-  let info =
-    '<div><p>Phonebook has info for ' + persons.length + ' people</p><p>' + new Date() +'</p></div>'
+  NumberInfo.find({}).then(infos => {
+    let info =
+    '<div><p>Phonebook has info for ' + infos.length + ' people</p><p>' + new Date() +'</p></div>'
 
   res.send(info)
+  })
 })
 
 app.get('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id)
-  const person = persons.find(person => person.id === id)
-
-  if (person) {
-    res.json(person)
-  } else {
-    res.status(404).end()
-  }
+  NumberInfo.findById(req.params.id).then(info => {
+    res.json(info)
+  })
 })
 
 app.delete('/api/persons/:id', (req, res) => {
@@ -86,9 +83,14 @@ app.post('/api/persons', (req, res) => {
   } else if (persons.find(p => p.name === person.name)) {
     res.status(422).end('name must be unique')
   } else {
-    person.id = Math.floor(Math.random() * 10000)
-    persons = persons.concat(person)
-    res.json(person)
+    const numberInfo = new NumberInfo({
+      name: person.name,
+      number: person.number
+    }) 
+
+    numberInfo.save().then(savedInfo => {
+      res.json(savedInfo)
+    })
   }
 
 })
