@@ -64,18 +64,21 @@ app.get('/api/persons', (req, res) => {
 })
 
 app.get('/info', (req, res) => {
-  NumberInfo.find({}).then(infos => {
-    let info =
-    '<div><p>Phonebook has info for ' + infos.length + ' people</p><p>' + new Date() +'</p></div>'
+  NumberInfo.find({})
+    .then(infos => {
+      let info =
+        '<div><p>Phonebook has info for ' + infos.length + ' people</p><p>' + new Date() +'</p></div>'
 
-  res.send(info)
-  })
+      res.send(info)
+    })
 })
 
-app.get('/api/persons/:id', (req, res) => {
-  NumberInfo.findById(req.params.id).then(info => {
-    res.json(info)
-  })
+app.get('/api/persons/:id', (req, res, next) => {
+  NumberInfo.findById(req.params.id)
+    .then(info => {
+      res.json(info)
+    })
+    .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (req, res, next) => {
