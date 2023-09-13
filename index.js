@@ -1,7 +1,7 @@
 require('dotenv').config()
 const express = require('express')
 const app = express()
-var morgan = require('morgan')
+const morgan = require('morgan')
 
 const NumberInfo = require('./modules/numberInfo')
 
@@ -31,25 +31,26 @@ app.use(morgan(function (tokens, req, res) {
 
 app.use(express.static('build'))
 
-let persons = [
-  { 
-    "name": "Arto Hellas", 
-    "number": "040-123456",
-    "id": 1},
-  { 
-    "name": "Ada Lovelace", 
-    "number": "39-44-5323523",
-    "id": 2
+const persons = [
+  {
+    name: 'Arto Hellas',
+    number: '040-123456',
+    id: 1
   },
-  { 
-    "name": "Dan Abramov", 
-    "number": "12-43-234345",
-    "id": 3
+  {
+    name: 'Ada Lovelace',
+    number: '39-44-5323523',
+    id: 2
   },
-  { 
-    "name": "Mary Poppendieck", 
-    "number": "39-23-6423122",
-    "id": 4
+  {
+    name: 'Dan Abramov',
+    number: '12-43-234345',
+    id: 3
+  },
+  {
+    name: 'Mary Poppendieck',
+    number: '39-23-6423122',
+    id: 4
   }
 ]
 
@@ -66,8 +67,8 @@ app.get('/api/persons', (req, res) => {
 app.get('/info', (req, res) => {
   NumberInfo.find({})
     .then(infos => {
-      let info =
-        '<div><p>Phonebook has info for ' + infos.length + ' people</p><p>' + new Date() +'</p></div>'
+      const info =
+        '<div><p>Phonebook has info for ' + infos.length + ' people</p><p>' + new Date() + '</p></div>'
 
       res.send(info)
     })
@@ -100,13 +101,12 @@ app.post('/api/persons', (req, res) => {
     const numberInfo = new NumberInfo({
       name: person.name,
       number: person.number
-    }) 
+    })
 
     numberInfo.save().then(savedInfo => {
       res.json(savedInfo)
     })
   }
-
 })
 
 app.use(errorHandler)
